@@ -13,6 +13,15 @@ class JSON_API_Okfn_Controller {
          * Returns an object listing all site members
          * @return Object Profile Fields
          */
+        public function min() {
+            $out = array( 'state'=>1, 'tom'=>cool );
+            return $out;
+        }
+
+        /**
+         * Returns an object listing all site members
+         * @return Object Profile Fields
+         */
         public function get_users () {
                 /* Possible parameters:
                  * String username: the username you want information from (required)
@@ -24,7 +33,8 @@ class JSON_API_Okfn_Controller {
                 }
 
                 $oReturn->users = array();
-                foreach (  get_users( array( 'blog_id'=>'' ) ) as $u ) {
+                //foreach (  get_users( array( 'blog_id'=>'' ) ) as $u ) {
+                foreach (  get_users() as $u ) {
                     if ($u->spam) {
                         continue;
                     }
