@@ -17,3 +17,4 @@ Designed for the Buddypress installation living on the [okfn.org](http://okfn.or
 * activate the plugin through the 'Plugins' menu in WordPress or by using the link provided by the plugin installer
 * activate the controller through the JSON API menu found in the WordPress admin center (Settings -> JSON API)
 
+
