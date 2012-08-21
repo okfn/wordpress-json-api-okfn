@@ -18,3 +18,4 @@ Designed for the Buddypress installation living on the [okfn.org](http://okfn.or
 * activate the controller through the JSON API menu found in the WordPress admin center (Settings -> JSON API)
 
 
+
