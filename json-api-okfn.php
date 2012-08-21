@@ -23,7 +23,7 @@ if (!is_plugin_active('json-api/json-api.php')) {
 }
 
 add_filter('json_api_controllers', 'addJsonApiController');
-add_filter('json_api_okfnread_controller_path', 'setOkfnReadControllerPath');
+add_filter('json_api_okfn_controller_path', 'setOkfnControllerPath');
 /* load_plugin_textdomain('json-api-okfn', false, basename( dirname( __FILE__ ) ) . '/languages' );*/
 
 function draw_notice_buddypress() {
@@ -39,10 +39,10 @@ function draw_notice_json_api(){
 }
 
 function addJsonApiController($aControllers) {
-  $aControllers[] = 'OkfnRead';
+  $aControllers[] = 'Okfn';
   return $aControllers;
 }
 
-function setOkfnReadControllerPath($sDefaultPath) {
-    return dirname(__FILE__).'/controllers/OkfnRead.php';
+function setOkfnControllerPath($sDefaultPath) {
+    return dirname(__FILE__).'/controllers/okfn.php';
 }

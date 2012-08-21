@@ -1,6 +1,6 @@
 <?php
 
-class JSON_API_OKFN_FUNCTION extends JSON_API_OkfnRead_Controller {
+class JSON_API_OKFN_FUNCTION extends JSON_API_Okfn_Controller {
 
         protected static $sVars = array ( );
 

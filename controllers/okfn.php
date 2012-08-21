@@ -1,13 +1,13 @@
 <?php
 
 /*
-  Controller name: OkfnRead
+  Controller name: Okfn
   Controller description: Okfn controller for reading actions
  */
 
 require_once JSON_API_OKFN_HOME . '/library/functions.class.php';
 
-class JSON_API_OkfnRead_Controller {
+class JSON_API_Okfn_Controller {
 
         /**
          * Returns an object listing all site members
