@@ -110,7 +110,6 @@ class JSON_API_Okfn_Controller {
             $u->email = bp_get_member_user_email();
             $u->login = bp_get_member_user_login();
             $u->display_name = bp_get_member_name();
-            $u->friend_count = bp_get_member_total_friend_count();
             $u->permalink = bp_get_member_permalink();
             $u->avatar = bp_get_member_avatar();
             $u->last_active = bp_get_member_last_active();
