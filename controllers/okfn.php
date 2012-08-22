@@ -1,92 +1,125 @@
 <?php
 
+
 /*
   Controller name: Okfn
   Controller description: Okfn controller for reading actions
  */
-
-require_once JSON_API_OKFN_HOME . '/library/functions.class.php';
-
 class JSON_API_Okfn_Controller {
 
-        /**
-         * Returns an object listing all site members
-         * @return Object Profile Fields
-         */
-        public function min() {
-            $out = array( 'state'=>1, 'tom'=>cool );
-            return $out;
+    protected static $sVars = array ( );
+
+    protected static function getParameters( $sModule ) {
+        $parameters = array (
+            'users' => array (
+                'string' => array (
+                    'auth' => false
+                )
+            )
+        );
+        if ( !isset ( $parameters [ $sModule ] ) )
+            throw new Exception ( "Parameters for module not defined." );
+
+        $out = array();
+        foreach ( $parameters [ $sModule ] as $sType => $aParameters ) {
+            foreach ( $aParameters as $sValName => $sVal ) {
+                $out[ $sValName ] = self::getVar( $sValName, $sVal, $sType );
+            }
+        }
+        return $out;
+    }
+
+    private static function getVar ( $sValName, $sVal, $sType ) {
+        global $json_api;
+        $mReturnVal = is_null ( $json_api->query->$sValName ) ? $sVal : $json_api->query->$sValName;
+        return self::sanitize ( $mReturnVal, $sType );
+    }
+
+    /**
+     * Method to sanitize the values given
+     * @param mixed $mValue Value to sanitize
+     * @param String $sType type of the Value given by parameters array
+     * @return mixed sanitized value
+     */
+    private static function sanitize ( $mValue, $sType ) {
+        switch ( $sType ) {
+        case "int":
+            if ( $mValue !== false )
+                $mValue = (int) $mValue;
+            break;
+        case "boolean":
+            $mValue = (boolean) $mValue;
+        case "string":
+        default:
+            switch ( gettype ( $mValue ) ) {
+            case 'string':
+                $mValue = strip_tags ( $mValue );
+                break;
+            case 'boolean':
+            default:
+                break;
+            }
+            break;
+        }
+        return $mValue;
+    }
+
+    /**
+     * Returns a String containing an error message
+     * @param String $sModule Modules name
+     * @param type $iCode Errorcode
+     */
+    protected static function error ( $sModule, $iCode ) {
+        $oReturn = new stdClass();
+        $oReturn->status = "error";
+        switch ( $sModule ) {
+        case "users":
+            switch ( $iCode ) {
+            case 1:
+                $oReturn->msg = __ ('Unauthorized.');
+                break 2;
+            }
+            default:
+                $oReturn->msg = __ ( 'An undefined error occured.' );
+        }
+        return $oReturn;
+    }
+
+
+    /**
+     * Returns an object listing all site members
+     */
+    public function get_users () {
+        $params = $this->getParameters( 'users' );
+        $oReturn = new stdClass();
+        if ( $params['auth'] !== '27b' ) {
+            return $this->error ( 'users', 1 );
         }
 
-        /**
-         * Returns an object listing all site members
-         * @return Object Profile Fields
-         */
-        public function get_users () {
-                /* Possible parameters:
-                 * String username: the username you want information from (required)
-                 */
-                $this->initVars ( 'users' );
-                $oReturn = new stdClass();
-                if ( $this->auth !== '27b' ) {
-                        return $this->error ( 'users', 1 );
-                }
+        $out->users = array();
 
-                $oReturn->users = array();
-                //foreach (  get_users( array( 'blog_id'=>'' ) ) as $u ) {
-                foreach (  get_users() as $u ) {
-                    if ($u->spam) {
-                        continue;
-                    }
-                    if ( !bp_has_profile ( array ( 'user_id' => $u->ID ) ) ) {
-                        continue;
-                    }
-                    $user = new stdClass();
-                    $user->display_name = $u->display_name;
-                    $user->login = $u->user_login;
-                    $user->status = $u->user_status;
-                    $user->email = $u->user_email;
-                    $user->registered = $u->user_registered;
-                    $user->twitter = bp_get_profile_field_data( array('user_id'=>$u->ID, 'field'=>'Twitter') );
-                    $user->location = bp_get_profile_field_data( array('user_id'=>$u->ID, 'field'=>'Location') );
-                    $user->about = bp_get_profile_field_data( array('user_id'=>$u->ID, 'field'=>'Description/ About Me') );
-                    $user->website = bp_get_profile_field_data( array('user_id'=>$u->ID, 'field'=>'Website') );
-                    array_push( $oReturn->users, $user );
-                }
-                return $oReturn;
-        }
+        if (bp_has_members()) :
+		while (bp_members()) :
+			bp_the_member();
+            $u = new stdClass();
+            $u->user_id = bp_get_member_user_id();
+			$u->twitter = bp_get_member_profile_data( array('field'=>'Twitter') );
+			$u->location = bp_get_member_profile_data( array('field'=>'Location') );
+			$u->about = bp_get_member_profile_data( array('field'=>'Description/ About Me)') );
+			$u->website = bp_get_member_profile_data( array('field'=>'Website') );
+            $u->email = bp_get_member_user_email();
+            $u->login = bp_get_member_user_login();
+            $u->display_name = bp_get_member_name();
+            $u->friend_count = bp_get_member_total_friend_count();
+            $u->permalink = bp_get_member_permalink();
+            $u->avatar = bp_get_member_avatar();
+            $u->last_active = bp_get_member_last_active();
+            $u->registered = bp_get_member_registered();
 
-        /**
-         * Method to handle calls for the library
-         * @param String $sName name of the static method to call
-         * @param Array $aArguments arguments for the method
-         * @return return value of static library function, otherwise null
-         */
-        public function __call ( $sName, $aArguments ) {
-                if ( class_exists ( "JSON_API_OKFN_FUNCTION" ) &&
-                        method_exists ( JSON_API_OKFN_FUNCTION, $sName ) &&
-                        is_callable ( "JSON_API_OKFN_FUNCTION::" . $sName ) ) {
-                        try {
-                                return call_user_func_array ( "JSON_API_OKFN_FUNCTION::" . $sName, $aArguments );
-                        } catch ( Exception $e ) {
-                                $oReturn = new stdClass();
-                                $oReturn->status = "error";
-                                $oReturn->msg = $e->getMessage ();
-                                die ( json_encode ( $oReturn ) );
-                        }
-                }
-                else
-                        return NULL;
-        }
-
-        /**
-         * Method to handle calls for parameters
-         * @param String $sName Name of the variable
-         * @return mixed value of the variable, otherwise null
-         */
-        public function __get ( $sName ) {
-                return isset ( JSON_API_OKFN_FUNCTION::$sVars[ $sName ] ) ? JSON_API_OKFN_FUNCTION::$sVars[ $sName ] : NULL;
-        }
+            array_push($out->users, $u);
+		endwhile;
+		endif;
+        return $out;
+    }
 }
-
 ?>
