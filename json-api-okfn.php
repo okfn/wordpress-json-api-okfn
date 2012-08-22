@@ -12,12 +12,10 @@ License: MIT
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 define ('JSON_API_OKFN_HOME', dirname(__FILE__));
 
-/* TODO restore
 if (!is_plugin_active('buddypress/bp-loader.php')) {
     add_action( 'admin_notices', 'draw_notice_buddypress');
     return;
 }
- */
 
 if (!is_plugin_active('json-api/json-api.php')) {
     add_action( 'admin_notices', 'draw_notice_json_api');
