@@ -105,7 +105,7 @@ class JSON_API_Okfn_Controller {
             $u->user_id = bp_get_member_user_id();
 			$u->twitter = bp_get_member_profile_data( array('field'=>'Twitter') );
 			$u->location = bp_get_member_profile_data( array('field'=>'Location') );
-			$u->about = bp_get_member_profile_data( array('field'=>'Description/ About Me') );
+			$u->about = bp_get_member_profile_data( array('field'=>'Description/ About me') );
 			$u->website = bp_get_member_profile_data( array('field'=>'Website') );
             $u->email = bp_get_member_user_email();
             $u->login = bp_get_member_user_login();
