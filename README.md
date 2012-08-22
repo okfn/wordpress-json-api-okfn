@@ -13,8 +13,9 @@ Designed for the Buddypress installation living on the [okfn.org](http://okfn.or
 
 ## Installation
 
-* upload the plugin to `wp-content/plugins/json-api-okfn`
+* upload this plugin to `wp-content/plugins/json-api-okfn`
 * activate the plugin through the 'Plugins' menu in WordPress or by using the link provided by the plugin installer
+* Perform similar steps to install the [JSON API plugin](http://wordpress.org/extend/plugins/json-api/installation/)
 * activate the controller through the JSON API menu found in the WordPress admin center (Settings -> JSON API)
 
 
