@@ -98,7 +98,7 @@ class JSON_API_Okfn_Controller {
 
         $out->users = array();
 
-        if (bp_has_members()) :
+        if (bp_has_members( array('per_page'=>0) )) :
 		while (bp_members()) :
 			bp_the_member();
             $u = new stdClass();
