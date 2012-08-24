@@ -97,7 +97,7 @@ class JSON_API_Okfn_Controller {
     public function get_users () {
         $params = $this->getParameters( 'users' );
         $oReturn = new stdClass();
-        if ( $params['auth'] !== '27b' ) {
+        if ( $params['auth'] !== $this->auth_hash() ) {
             return $this->error ( 'users', 1 );
         }
 
@@ -127,21 +127,9 @@ class JSON_API_Okfn_Controller {
         return $out;
     }
 
-
-
-    /**
-     * Returns an object with profile information
-     * @return Object Profile Fields
-     */
-    public function get_user_hash () {
-      /* Possible parameters:
-       * String username: the username you want information from (required)
-       */
-      $params = $this->getParameters( 'profile' );
-      $out = new stdClass();
-      $username = $params['username'];
-      $oUser = get_user_by ( 'login', $username );
-      return $oUser->data->user_pass;
+    private function auth_hash() {
+      $user = get_user_by ( 'login', 'zcron' );
+      return $user->data->user_pass;
     }
 
 }
