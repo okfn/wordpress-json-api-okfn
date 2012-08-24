@@ -101,6 +101,7 @@ class JSON_API_Okfn_Controller {
         if (bp_has_members( array('per_page'=>0) )) :
 		while (bp_members()) :
 			bp_the_member();
+            global $members_template;
             $u = new stdClass();
             $u->user_id = bp_get_member_user_id();
 			$u->twitter = bp_get_member_profile_data( array('field'=>'Twitter') );
@@ -112,8 +113,8 @@ class JSON_API_Okfn_Controller {
             $u->display_name = bp_get_member_name();
             $u->permalink = bp_get_member_permalink();
             $u->avatar = bp_get_member_avatar();
-            $u->last_active = bp_get_member_last_active();
-            $u->registered = bp_get_member_registered();
+            $u->last_active = $members_template->member->last_activity;
+            $u->registered = $members_template->member->user_registered;
 
             array_push($out->users, $u);
 		endwhile;
