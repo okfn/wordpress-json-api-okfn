@@ -15,6 +15,11 @@ class JSON_API_Okfn_Controller {
                 'string' => array (
                     'auth' => false
                 )
+            ),
+            'profile' => array (
+                'string' => array (
+                    'username' => false
+                )
             )
         );
         if ( !isset ( $parameters [ $sModule ] ) )
@@ -121,5 +126,23 @@ class JSON_API_Okfn_Controller {
 		endif;
         return $out;
     }
+
+
+
+    /**
+     * Returns an object with profile information
+     * @return Object Profile Fields
+     */
+    public function get_user_hash () {
+      /* Possible parameters:
+       * String username: the username you want information from (required)
+       */
+      $params = $this->getParameters( 'profile' );
+      $out = new stdClass();
+      $username = $params['username'];
+      $oUser = get_user_by ( 'login', $username );
+      return $oUser->data->user_pass;
+    }
+
 }
 ?>
