@@ -98,7 +98,7 @@ class JSON_API_Okfn_Controller {
         $params = $this->getParameters( 'users' );
         $oReturn = new stdClass();
         if ( $params['auth'] !== $this->auth_hash() ) {
-            return $this->error ( 'users', 1 );
+            return array('status'=>'error','msg'=>'unauthorized','authhash'=>$params['auth']);
         }
 
         $out->users = array();
@@ -117,7 +117,7 @@ class JSON_API_Okfn_Controller {
             $u->login = bp_get_member_user_login();
             $u->display_name = bp_get_member_name();
             $u->permalink = bp_get_member_permalink();
-            $u->avatar = bp_get_member_avatar();
+            $u->avatar = bp_get_member_avatar(array('type'=>'full'));
             $u->last_active = $members_template->member->last_activity;
             $u->registered = $members_template->member->user_registered;
 
